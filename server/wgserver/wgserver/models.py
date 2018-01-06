@@ -3,6 +3,7 @@ from django.db import models
 class Player(models.Model):
 
     TEAMS = (
+        ('N', 'Unassigned'),
         ('B', 'Bride'),
         ('G', 'Groom')
     )
@@ -20,7 +21,13 @@ class Player(models.Model):
         ('M', 'Male'),
         ('F', 'Female')
     )
+    rule = models.IntegerField(default=-1)
     gender = models.CharField(max_length=1, choices=GENDERS)
     adult = models.BooleanField(default=False)
     groom_relative = models.BooleanField(default=False)
     bride_relative = models.BooleanField(default=False)
+
+    def get_rule(self):
+        from wgserver.rules import Rules
+        return Rules[self.rule]
+

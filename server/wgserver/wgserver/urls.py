@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from wgserver import api
 
 urlpatterns = [
+    path('api/activate', api.activate, name='activate'),
+    path('api/status', api.status, name='status'),
+    path('api/interact', api.interact, name='interact'),
+    path('api/ratio', api.ratio, name='ratio'),
     path('admin/', admin.site.urls),
 ]
