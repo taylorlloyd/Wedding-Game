@@ -1,0 +1,21 @@
+.bride, .groom {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    font-family:'Lobster', cursive;
+    font-size: 80pt;
+}
+.groom {
+    bottom: 0px;
+}
+
+.canvas {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 0;
+}
+body {
+    overflow:hidden;
+}
