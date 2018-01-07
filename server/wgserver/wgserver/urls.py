@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/status', api.status, name='status'),
     path('api/interact', api.interact, name='interact'),
     path('api/ratio', api.ratio, name='ratio'),
+    path('api/leaderboard', api.leaderboard, name='leaderboard'),
     path('admin/', admin.site.urls),
 ]

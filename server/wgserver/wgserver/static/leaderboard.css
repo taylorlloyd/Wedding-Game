@@ -1,0 +1,26 @@
+h1 {
+    font-size:36pt;
+    text-align:center;
+}
+th {
+    font-size:24pt;
+}
+td {
+    font-size:24pt;
+}
+.spacer {
+    height: 100%;
+}
+table.table {
+    margin-left:10%;
+    margin-right:10%;
+    margin-bottom:90%;
+    width:80%;
+    background-color:#FFF;
+}
+body {
+    background-image: url("/static/stylized-background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}

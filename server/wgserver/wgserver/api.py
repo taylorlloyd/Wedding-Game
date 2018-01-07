@@ -49,13 +49,26 @@ def interact(request):
     if flip1:
         player1.team = p2_team
         player1.rule = random.randint(0,len(Rules)-1)
-        player1.save()
         p2_fail_reason = CHANGED + player1.first_name
+        player1.flipped = player1.flipped + 1
+        if p2_team == 'G':
+            player2.groom_conversions = player2.groom_conversions + 1
+        else:
+            player2.bride_conversions = player2.bride_conversions + 1
     if flip2:
         player2.team = p1_team
         player2.rule = random.randint(0,len(Rules)-1)
-        player2.save()
         p1_fail_reason = CHANGED + player2.first_name
+        player2.flipped = player2.flipped + 1
+        if p1_team == 'G':
+            player1.groom_conversions = player1.groom_conversions + 1
+        else:
+            player1.bride_conversions = player1.bride_conversions + 1
+
+    player1.interactions += 1
+    player2.interactions += 1
+    player1.save()
+    player2.save()
 
     # Send information
     return JsonResponse({
@@ -105,6 +118,19 @@ def ratio(request):
     bride_side = Player.objects.filter(team='B').count()
     groom_side = Player.objects.filter(team='G').count()
     return JsonResponse({'status':'ok', 'bride_side':bride_side, 'groom_side':groom_side})
+
+def leaderboard(request):
+    topBrides = list(Player.objects.filter(team='B').order_by('-bride_conversions')[:10])
+    topGrooms = list(Player.objects.filter(team='G').order_by('-groom_conversions')[:10])
+    topFlipped = list(Player.objects.order_by('-flipped')[:10])
+    topSocial = list(Player.objects.order_by('-interactions')[:10])
+    return JsonResponse({
+        'status':'ok',
+        'topBrides': [{'name': p.first_name + " " + p.last_name, 'points':p.bride_conversions} for p in topBrides],
+        'topGrooms': [{'name': p.first_name + " " + p.last_name, 'points':p.groom_conversions} for p in topGrooms],
+        'topFlipped': [{'name': p.first_name + " " + p.last_name, 'points':p.flipped} for p in topFlipped],
+        'topSocial': [{'name': p.first_name + " " + p.last_name, 'points':p.interactions} for p in topSocial],
+    })
 
 
 def errorResponse(errmsg):

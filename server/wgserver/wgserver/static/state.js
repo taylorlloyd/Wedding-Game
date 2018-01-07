@@ -1,14 +1,16 @@
 brideColor = "#ff7f7f";
 groomColor = "#4286f4";
-lastData = [];
+updateTime= 10*1000; // 10 seconds
+showTime = 10*60*1000; // 10 min
+maxCols = showTime/updateTime;
+data = [0.5, 0.5, 0.5];
 
 function drawGraph(performance, canvas) {
-    lastData = performance;
-    columns = Math.min(33, performance.length)
+    columns = Math.min(maxCols, performance.length)
     width = canvas.width;
     height = canvas.height;
     ctx = canvas.getContext('2d');
-    colWidth = Math.floor(width/(columns-1));
+    colWidth = Math.ceil(width/(columns-1));
     // Draw each column
     base=performance.length-columns;
     for(i=0; i<columns-1; i++) {
@@ -37,12 +39,27 @@ function resizeCanvas() {
     var canvas = document.getElementById('canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    drawGraph(lastData, canvas);
+    drawGraph(data, canvas);
+}
+
+function updateGraph() {
+    var req = new XMLHttpRequest();
+    req.open("GET", "/api/ratio", false)
+    req.send(null);
+    var response = JSON.parse(req.responseText);
+    console.log(response);
+    b_pct = response.bride_side/(response.bride_side+response.groom_side);
+    g_pct = 1 - b_pct;
+    if(response.bride_side + response.groom_side > 0)
+        data.push(response.bride_side/(response.bride_side+response.groom_side));
+    drawGraph(data, document.getElementById('canvas'));
+    document.getElementById('bridePct').innerHTML = (b_pct*100).toFixed(0);
+    document.getElementById('groomPct').innerHTML = (g_pct*100).toFixed(0);
 }
 
 window.onload = function(e) {
     window.addEventListener('resize', resizeCanvas, false);
     resizeCanvas();
-    perf = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.5, 0.4, 0.3, 0.6, 0.9, 1.0];
-    drawGraph(perf, document.getElementById('canvas'));
+    setInterval(updateGraph,updateTime);
+    updateGraph();
 }

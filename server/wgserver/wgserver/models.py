@@ -31,3 +31,8 @@ class Player(models.Model):
         from wgserver.rules import Rules
         return Rules[self.rule]
 
+    # Leaderboard tracking
+    flipped = models.IntegerField(default=0)
+    groom_conversions = models.IntegerField(default=0)
+    bride_conversions = models.IntegerField(default=0)
+    interactions = models.IntegerField(default=0)
