@@ -26,7 +26,15 @@ def interact(request):
     except Player.DoesNotExist:
         return errorResponse("No player with that tag exists")
 
-#TODO: Handle non-activated players
+    #Handle non-activated players
+    if player1.team == 'N' and player2.team == 'N':
+      #Nobody is activated
+      return errorResponse("Neither of you have joined the game yet!")
+    if player1.team == 'N':
+      return errorResponse(player1.first_name + " hasn't joined the game yet!")
+    if player2.team == 'N':
+      return errorResponse(player2.first_name + " hasn't joined the game yet!")
+
 #TODO: Handle playing yourself
 
     # Resolve rules
