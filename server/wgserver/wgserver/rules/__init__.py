@@ -106,7 +106,7 @@ class JustMetRule(Rule):
     def matches(self, source, target):
         return target.just_met == True
     def rule_text(self):
-        return "anyone who met the bride and groom here"
+        return "anyone who met the bride or groom here"
 
 class SingleRule(Rule):
     def __init__(self):
